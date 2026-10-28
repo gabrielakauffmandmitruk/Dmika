@@ -65,104 +65,40 @@ const equipamentos = [
   }
 ];
 
-const campoBusca = document.getElementById("campoBusca");
-const campoBuscaSelect = document.getElementById("campoBuscaSelect");
-const botaoBuscar = document.getElementById("btnBuscar");
-const botaoLimpar = document.getElementById("btnLimpar");
-const resultadoInfo = document.getElementById("resultadoInfo");
-const tbody = document.querySelector("#resultadoTabela tbody");
+ }
+];
 
-function normalizarTexto(texto) {
-  return String(texto)
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .trim();
-}
+function carregarTabela(lista) {
+  const tabela = document.getElementById("resultadoTabela");
 
-function renderizarTabela(lista) {
-  tbody.innerHTML = "";
+  tabela.innerHTML = "";
 
-  if (lista.length === 0) {
-    tbody.innerHTML = `
+  lista.forEach(item => {
+    tabela.innerHTML += `
       <tr>
-        <td colspan="6" class="empty-message">
-          Nenhum equipamento encontrado para a busca informada.
-        </td>
+        <td>${item.servidor}</td>
+        <td>${item.material}</td>
+        <td>${item.serie}</td>
+        <td>${item.patrimonio}</td>
       </tr>
     `;
-
-    resultadoInfo.textContent = "0 resultados";
-    return;
-  }
-
-  lista.forEach((equipamento) => {
-    const linha = document.createElement("tr");
-
-    const statusClass = equipamento.status
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/\s+/g, "-");
-
-    linha.innerHTML = `
-      <td>${equipamento.servidor}</td>
-      <td>${equipamento.material}</td>
-      <td>${equipamento.numeroSerie}</td>
-      <td>${equipamento.patrimonio}</td>
-      <td>${equipamento.setor}</td>
-      <td>
-        <span class="status ${statusClass}">${equipamento.status}</span>
-      </td>
-    `;
-
-    tbody.appendChild(linha);
   });
-
-  resultadoInfo.textContent = `Exibindo ${lista.length} de ${equipamentos.length} resultados`;
 }
 
-function buscarEquipamentos() {
-  const termoBusca = normalizarTexto(campoBusca.value);
-  const campoSelecionado = campoBuscaSelect.value;
+function pesquisar() {
+  const termo = document
+    .getElementById("busca")
+    .value
+    .toLowerCase();
 
-  if (!termoBusca) {
-    renderizarTabela(equipamentos);
-    return;
-  }
+  const resultado = cautelas.filter(item =>
+    item.servidor.toLowerCase().includes(termo) ||
+    item.material.toLowerCase().includes(termo) ||
+    item.serie.toLowerCase().includes(termo) ||
+    item.patrimonio.toLowerCase().includes(termo)
+  );
 
-  const resultados = equipamentos.filter((equipamento) => {
-    const camposParaPesquisar =
-      campoSelecionado === "todos"
-        ? [
-            equipamento.servidor,
-            equipamento.material,
-            equipamento.numeroSerie,
-            equipamento.patrimonio
-          ]
-        : [equipamento[campoSelecionado]];
-
-    return camposParaPesquisar.some((valor) =>
-      normalizarTexto(valor).includes(termoBusca)
-    );
-  });
-
-  renderizarTabela(resultados);
+  carregarTabela(resultado);
 }
 
-botaoBuscar.addEventListener("click", buscarEquipamentos);
-
-campoBusca.addEventListener("keydown", (evento) => {
-  if (evento.key === "Enter") {
-    buscarEquipamentos();
-  }
-});
-
-botaoLimpar.addEventListener("click", () => {
-  campoBusca.value = "";
-  campoBuscaSelect.value = "todos";
-  renderizarTabela(equipamentos);
-  campoBusca.focus();
-});
-
-renderizarTabela(equipamentos);
+carregarTabela(cautelas);
