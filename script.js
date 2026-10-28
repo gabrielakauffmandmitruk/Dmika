@@ -59,4 +59,27 @@ function carregarTabela(lista) {
       <tr>
         <td>${item.servidor}</td>
         <td>${item.material}</td>
-        <td>
+        <td>${item.numeroSerie}</td>
+        <td>${item.patrimonio}</td>
+      </tr>
+    `;
+  });
+}
+
+function pesquisar() {
+  const termo = document
+    .getElementById("busca")
+    .value
+    .toLowerCase();
+
+  const resultado = equipamentos.filter(item =>
+    item.servidor.toLowerCase().includes(termo) ||
+    item.material.toLowerCase().includes(termo) ||
+    item.numeroSerie.toLowerCase().includes(termo) ||
+    item.patrimonio.toLowerCase().includes(termo)
+  );
+
+  carregarTabela(resultado);
+}
+
+carregarTabela(equipamentos);
