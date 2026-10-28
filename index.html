@@ -84,4 +84,21 @@ function pesquisar() {
     item.servidor.toLowerCase().includes(termo) ||
     item.material.toLowerCase().includes(termo) ||
     item.numeroSerie.toLowerCase().includes(termo) ||
-    item.patrimonio
+    item.patrimonio.toLowerCase().includes(termo)
+  );
+
+  tabela.style.display = "table";
+
+  if (resultado.length === 0) {
+    document.getElementById("resultadoTabela").innerHTML = `
+      <tr>
+        <td colspan="4" style="text-align:center;color:red;">
+          Nenhum resultado encontrado.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  carregarTabela(resultado);
+}
