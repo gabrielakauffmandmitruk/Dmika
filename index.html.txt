@@ -1,0 +1,6 @@
+style.css
+Sistema de Consulta de Cautelas de TI
+Pesquisar por servidor, material, série ou patrimônio
+ Pesquisar
+Servidor	Material	Nº Série	Patrimônio
+script.jsscript
