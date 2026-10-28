@@ -9,9 +9,9 @@ body {
     max-width: 1200px;
     margin: auto;
     background: white;
-    padding: 25px;
+    padding: 30px;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .logo {
@@ -27,7 +27,67 @@ body {
 h1 {
     text-align: center;
     color: #1e3a8a;
+    margin-bottom: 30px;
+}
+
+.pesquisa {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
     margin-bottom: 25px;
 }
 
-.pesquisa 
+input {
+    width: 350px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+button {
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+button:hover {
+    background-color: #1d4ed8;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th {
+    background-color: #2563eb;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+tr:nth-child(even) {
+    background-color: #f8fafc;
+}
+
+tr:hover {
+    background-color: #e2e8f0;
+}
+
+.mensagem {
+    text-align: center;
+    color: #666;
+    padding: 20px;
+    font-style: italic;
+}
