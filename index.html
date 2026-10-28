@@ -1,104 +1,51 @@
-const equipamentos = [
-  {
-    servidor: "ANA MARINA DE CASTRO",
-    material: "Ultrabook Vaio",
-    numeroSerie: "89693074R",
-    patrimonio: "2024018048"
-  },
-  {
-    servidor: "BRUNO PIMENTEL NYKIEL",
-    material: "Servidor HP ProLiant DL380",
-    numeroSerie: "HP-7842A",
-    patrimonio: "2019029241"
-  },
-  {
-    servidor: "CAROLINA NIKOLUK SCACHETTI DE MELLO",
-    material: "Storage Synology RS2423+",
-    numeroSerie: "SY-5567N",
-    patrimonio: "2022057214"
-  },
-  {
-    servidor: "EDUARDO GERALDO DOS SANTOS",
-    material: "Servidor Lenovo ThinkSystem",
-    numeroSerie: "LN-01349",
-    patrimonio: "2022057137"
-  },
-  {
-    servidor: "LUIZ CARLOS FARIA TORRES",
-    material: "Firewall Fortinet 100F",
-    numeroSerie: "PE0FBHM3",
-    patrimonio: "2026036354"
-  },
-  {
-    servidor: "FRANCISCO APARECIDO SARANTTO DE PAULA NETO",
-    material: "Impressora Multifuncional Ricoh",
-    numeroSerie: "89693215S",
-    patrimonio: "2024018167"
-  },
-  {
-    servidor: "KELMANN OLIVEIRA FREITAS",
-    material: "Notebook Dell Latitude 7440",
-    numeroSerie: "DL-91022",
-    patrimonio: "2019029321"
-  },
-  {
-    servidor: "VINÍCIUS PEREIRA DE MEDEIROS",
-    material: "Switch Cisco Catalyst 9300",
-    numeroSerie: "CS-23488",
-    patrimonio: "2019069858"
-  }
-];
+<!DOCTYPE html>
+<html lang="pt-BR">
 
-function carregarTabela(lista) {
-  const tabela = document.getElementById("resultadoTabela");
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Consulta de Cautelas TI</title>
+    <link rel="stylesheet" href="style.css">
+</head>
 
-  tabela.innerHTML = "";
+<body>
 
-  lista.forEach(item => {
-    tabela.innerHTML += `
-      <tr>
-        <td>${item.servidor}</td>
-        <td>${item.material}</td>
-        <td>${item.numeroSerie}</td>
-        <td>${item.patrimonio}</td>
-      </tr>
-    `;
-  });
-}
+    <div class="container">
 
-function pesquisar() {
-  const termo = document
-    .getElementById("busca")
-    .value
-    .trim()
-    .toLowerCase();
+        <div class="logo">
+            <img src="logo-dmika.png" alt="Logo DMIKA">
+        </div>
 
-  const tabela = document.getElementById("tabelaResultados");
+        <h1>Sistema de Consulta de Cautelas de TI</h1>
 
-  if (termo === "") {
-    tabela.style.display = "none";
-    return;
-  }
+        <div class="pesquisa">
+            <input type="text"
+                id="busca"
+                placeholder="Pesquisar por servidor, material, série ou patrimônio">
 
-  const resultado = equipamentos.filter(item =>
-    item.servidor.toLowerCase().includes(termo) ||
-    item.material.toLowerCase().includes(termo) ||
-    item.numeroSerie.toLowerCase().includes(termo) ||
-    item.patrimonio.toLowerCase().includes(termo)
-  );
+            <button onclick="pesquisar()">
+                Pesquisar
+            </button>
+        </div>
 
-  tabela.style.display = "table";
+        <table>
+            <thead>
+                <tr>
+                    <th>Servidor</th>
+                    <th>Material</th>
+                    <th>Nº Série</th>
+                    <th>Patrimônio</th>
+                </tr>
+            </thead>
 
-  if (resultado.length === 0) {
-    document.getElementById("resultadoTabela").innerHTML = `
-      <tr>
-        <td colspan="4" style="text-align:center;color:red;">
-          Nenhum resultado encontrado.
-        </td>
-      </tr>
-    `;
-    return;
-  }
+            <tbody id="resultadoTabela">
+            </tbody>
+        </table>
 
-  carregarTabela(resultado);
-}
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
