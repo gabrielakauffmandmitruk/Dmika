@@ -33,6 +33,7 @@ button {
     border: none;
     padding: 10px 20px;
     cursor: pointer;
+    border-radius: 5px;
 }
 
 table {
@@ -49,4 +50,8 @@ th {
 td {
     border: 1px solid #ddd;
     padding: 10px;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
 }
