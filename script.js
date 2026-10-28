@@ -52,17 +52,6 @@ const equipamentos = [
 function carregarTabela(lista) {
   const tabela = document.getElementById("resultadoTabela");
 
-  if (lista.length === 0) {
-    tabela.innerHTML = `
-      <tr>
-        <td colspan="4" style="text-align:center;">
-          Digite um nome, patrimônio, série ou material e clique em Pesquisar
-        </td>
-      </tr>
-    `;
-    return;
-  }
-
   tabela.innerHTML = "";
 
   lista.forEach(item => {
@@ -85,7 +74,7 @@ function pesquisar() {
     .toLowerCase();
 
   if (termo === "") {
-    carregarTabela([]);
+    document.getElementById("resultadoTabela").innerHTML = "";
     return;
   }
 
@@ -96,19 +85,5 @@ function pesquisar() {
     item.patrimonio.toLowerCase().includes(termo)
   );
 
-  if (resultado.length === 0) {
-    tabela = document.getElementById("resultadoTabela");
-    tabela.innerHTML = `
-      <tr>
-        <td colspan="4" style="text-align:center;color:red;">
-          Nenhum resultado encontrado.
-        </td>
-      </tr>
-    `;
-    return;
-  }
-
   carregarTabela(resultado);
 }
-
-carregarTabela([]);
