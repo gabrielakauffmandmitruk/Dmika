@@ -1,19 +1,19 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #050505;
+    background-color: #000000;
+    color: #ffffff;
     margin: 0;
     padding: 30px;
-    color: #ffffff;
 }
 
 .container {
     max-width: 1200px;
     margin: auto;
-    background-color: #111111;
+    background-color: #050505;
     padding: 30px;
     border-radius: 15px;
-    border: 1px solid #222222;
-    box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
+    border: 1px solid #1a1a1a;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.9);
 }
 
 .logo {
@@ -28,7 +28,7 @@ body {
 
 h1 {
     text-align: center;
-    color: #4da6ff;
+    color: #3399ff;
     margin-bottom: 25px;
 }
 
@@ -41,10 +41,11 @@ h1 {
 input {
     flex: 1;
     padding: 12px;
-    background-color: #1a1a1a;
-    color: white;
+    background-color: #000000;
+    color: #ffffff;
     border: 1px solid #333333;
     border-radius: 8px;
+    font-size: 14px;
 }
 
 input::placeholder {
@@ -55,10 +56,10 @@ button {
     background-color: #0066ff;
     color: white;
     border: none;
-    padding: 12px 20px;
     border-radius: 8px;
-    font-weight: bold;
+    padding: 12px 20px;
     cursor: pointer;
+    font-weight: bold;
 }
 
 button:hover {
@@ -69,6 +70,7 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+    background-color: #000000;
 }
 
 th {
@@ -84,11 +86,15 @@ td {
 }
 
 tr:nth-child(even) {
-    background-color: #151515;
+    background-color: #0a0a0a;
+}
+
+tr:nth-child(odd) {
+    background-color: #050505;
 }
 
 tr:hover {
-    background-color: #222222;
+    background-color: #111111;
 }
 
 th:nth-child(1),
