@@ -1,6 +1,47 @@
-Sistema de Consulta de Cautelas de TI
-Servidor
-Material	
-Nº Série	
-Patrimônio
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>Sistema de Consulta de Cautelas TI</title>
+
+  <link rel="stylesheet" href="estilo.css">
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>Sistema de Consulta de Cautelas de TI</h1>
+
+  <div class="pesquisa">
+    <input
+      type="text"
+      id="busca"
+      placeholder="Pesquisar por servidor, material, série ou patrimônio">
+
+    <button onclick="pesquisar()">
+      Pesquisar
+    </button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Servidor</th>
+        <th>Material</th>
+        <th>Nº Série</th>
+        <th>Patrimônio</th>
+      </tr>
+    </thead>
+
+    <tbody id="resultadoTabela"></tbody>
+  </table>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
