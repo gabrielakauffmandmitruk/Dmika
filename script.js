@@ -12,6 +12,36 @@ const equipamentos = [
     patrimonio: "2019029241"
   },
   {
+    servidor: "CAROLINA NIKOLUK SCACHETTI DE MELLO",
+    material: "Storage Synology RS2423+",
+    numeroSerie: "SY-5567N",
+    patrimonio: "2022057214"
+  },
+  {
+    servidor: "EDUARDO GERALDO DOS SANTOS",
+    material: "Servidor Lenovo ThinkSystem",
+    numeroSerie: "LN-01349",
+    patrimonio: "2022057137"
+  },
+  {
+    servidor: "LUIZ CARLOS FARIA TORRES",
+    material: "Firewall Fortinet 100F",
+    numeroSerie: "PE0FBHM3",
+    patrimonio: "2026036354"
+  },
+  {
+    servidor: "FRANCISCO APARECIDO SARANTTO DE PAULA NETO",
+    material: "Impressora Multifuncional Ricoh",
+    numeroSerie: "89693215S",
+    patrimonio: "2024018167"
+  },
+  {
+    servidor: "KELMANN OLIVEIRA FREITAS",
+    material: "Notebook Dell Latitude 7440",
+    numeroSerie: "DL-91022",
+    patrimonio: "2019029321"
+  },
+  {
     servidor: "VINÍCIUS PEREIRA DE MEDEIROS",
     material: "Switch Cisco Catalyst 9300",
     numeroSerie: "CS-23488",
@@ -22,10 +52,21 @@ const equipamentos = [
 function carregarTabela(lista) {
   const tabela = document.getElementById("resultadoTabela");
 
+  if (lista.length === 0) {
+    tabela.innerHTML = `
+      <tr>
+        <td colspan="4" style="text-align:center;">
+          Digite um nome, patrimônio, série ou material e clique em Pesquisar
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
   tabela.innerHTML = "";
 
   lista.forEach(item => {
-    const linha = `
+    tabela.innerHTML += `
       <tr>
         <td>${item.servidor}</td>
         <td>${item.material}</td>
@@ -33,8 +74,6 @@ function carregarTabela(lista) {
         <td>${item.patrimonio}</td>
       </tr>
     `;
-
-    tabela.innerHTML += linha;
   });
 }
 
@@ -42,7 +81,13 @@ function pesquisar() {
   const termo = document
     .getElementById("busca")
     .value
+    .trim()
     .toLowerCase();
+
+  if (termo === "") {
+    carregarTabela([]);
+    return;
+  }
 
   const resultado = equipamentos.filter(item =>
     item.servidor.toLowerCase().includes(termo) ||
@@ -51,7 +96,19 @@ function pesquisar() {
     item.patrimonio.toLowerCase().includes(termo)
   );
 
+  if (resultado.length === 0) {
+    tabela = document.getElementById("resultadoTabela");
+    tabela.innerHTML = `
+      <tr>
+        <td colspan="4" style="text-align:center;color:red;">
+          Nenhum resultado encontrado.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
   carregarTabela(resultado);
 }
 
-carregarTabela(equipamentos);
+carregarTabela([]);
