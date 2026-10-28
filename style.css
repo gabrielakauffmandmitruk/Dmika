@@ -1,58 +1,49 @@
-const cautelas = [
-    {
-        servidor: "João Silva",
-        material: "Notebook Dell",
-        serie: "ABC12345",
-        patrimonio: "10001"
-    },
-    {
-        servidor: "Maria Souza",
-        material: "Monitor LG",
-        serie: "XYZ98765",
-        patrimonio: "10002"
-    },
-    {
-        servidor: "Carlos Lima",
-        material: "Notebook Lenovo",
-        serie: "LEN123456",
-        patrimonio: "10003"
-    }
-];
-
-function carregarTabela(lista) {
-
-    const tabela = document.getElementById("resultadoTabela");
-
-    tabela.innerHTML = "";
-
-    lista.forEach(item => {
-
-        tabela.innerHTML += `
-            <tr>
-                <td>${item.servidor}</td>
-                <td>${item.material}</td>
-                <td>${item.serie}</td>
-                <td>${item.patrimonio}</td>
-            </tr>
-        `;
-    });
+body{
+font-family:Arial,sans-serif;
+background:#f5f5f5;
+padding:20px;
 }
 
-function pesquisar() {
-
-    const termo = document
-        .getElementById("busca")
-        .value
-        .toLowerCase();
-
-    const resultado = cautelas.filter(item =>
-        item.servidor.toLowerCase().includes(termo) ||
-        item.material.toLowerCase().includes(termo) ||
-        item.serie.toLowerCase().includes(termo) ||
-        item.patrimonio.toLowerCase().includes(termo)
-    );
-
-    carregarTabela(resultado);
+.container{
+background:white;
+padding:20px;
+max-width:1000px;
+margin:auto;
+border-radius:10px;
 }
 
-carregarTabela(cautelas);
+.pesquisa{
+display:flex;
+gap:10px;
+margin-bottom:20px;
+}
+
+input{
+flex:1;
+padding:10px;
+}
+
+button{
+padding:10px;
+background:#2563eb;
+color:white;
+border:none;
+border-radius:5px;
+cursor:pointer;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th{
+background:#2563eb;
+color:white;
+padding:10px;
+}
+
+td{
+padding:10px;
+border:1px solid #ddd;
+}
