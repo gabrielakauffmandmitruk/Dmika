@@ -9,11 +9,11 @@ body {
 .container {
     max-width: 1200px;
     margin: auto;
-    background-color: #050505;
+    background-color: #000000;
     padding: 30px;
     border-radius: 15px;
-    border: 1px solid #1a1a1a;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.9);
+    border: 1px solid #222222;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
 }
 
 .logo {
@@ -28,20 +28,21 @@ body {
 
 h1 {
     text-align: center;
-    color: #3399ff;
+    color: #ffffff;
     margin-bottom: 25px;
 }
 
 .pesquisa {
     display: flex;
+    justify-content: center;
     gap: 10px;
     margin-bottom: 25px;
 }
 
 input {
-    flex: 1;
+    width: 400px;
     padding: 12px;
-    background-color: #000000;
+    background-color: #111111;
     color: #ffffff;
     border: 1px solid #333333;
     border-radius: 8px;
@@ -49,7 +50,7 @@ input {
 }
 
 input::placeholder {
-    color: #888888;
+    color: #999999;
 }
 
 button {
@@ -70,7 +71,6 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
-    background-color: #000000;
 }
 
 th {
@@ -82,19 +82,20 @@ th {
 
 td {
     padding: 15px;
+    color: white;
     border-bottom: 1px solid #222222;
 }
 
 tr:nth-child(even) {
-    background-color: #0a0a0a;
+    background-color: #111111;
 }
 
 tr:nth-child(odd) {
-    background-color: #050505;
+    background-color: #000000;
 }
 
 tr:hover {
-    background-color: #111111;
+    background-color: #1a1a1a;
 }
 
 th:nth-child(1),
