@@ -1,7 +1,6 @@
 
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,130 +9,209 @@
 </head>
 
 <body>
+<div class="layout">
 
-    <div class="layout">
+    <aside class="menu">
+        <div class="logo">
+            <img src="logo-dmika.png" alt="Logo DMIKA">
+            <h2>DMIKA</h2>
+            <p>CONTROLE DE TI</p>
+        </div>
 
-        <aside class="menu">
-            <div class="logo">
-                <img src="logo-dmika.png" alt="Logo DMIKA">
-                <h2>DMIKA</h2>
-                <p>CONTROLE DE TI</p>
+        <nav>
+            <button class="menu-item ativo" data-pagina="inicio"
+                onclick="mostrarPagina('inicio', this)">🏠 Início</button>
+
+            <button class="menu-item" data-pagina="equipamentos"
+                onclick="mostrarPagina('equipamentos', this)">🖥️ Equipamentos</button>
+
+            <button class="menu-item" data-pagina="servidores"
+                onclick="mostrarPagina('servidores', this)">👥 Servidores</button>
+
+            <button class="menu-item" data-pagina="importar"
+                onclick="mostrarPagina('importar', this)">📥 Importar planilha</button>
+
+            <button class="menu-item" data-pagina="historico"
+                onclick="mostrarPagina('historico', this)">📋 Histórico</button>
+        </nav>
+    </aside>
+
+    <main class="conteudo">
+
+        <header class="topo">
+            <div>
+                <h1>Sistema de Consulta de Cautelas de TI</h1>
+                <p>Gerenciamento e consulta de equipamentos</p>
+            </div>
+        </header>
+
+        <!-- INÍCIO -->
+        <section id="inicio" class="pagina ativa">
+            <h2>Bem-vindo ao DMIKA</h2>
+            <p>Selecione uma opção no menu para começar.</p>
+
+            <div class="cards">
+                <div class="card">
+                    <span>🖥️</span>
+                    <h3>Equipamentos</h3>
+                    <p>Consulte os equipamentos cadastrados.</p>
+                    <button onclick="mostrarPagina('equipamentos')">Acessar</button>
+                </div>
+
+                <div class="card">
+                    <span>👥</span>
+                    <h3>Servidores</h3>
+                    <p>Consulte os servidores e seus equipamentos.</p>
+                    <button onclick="mostrarPagina('servidores')">Acessar</button>
+                </div>
+
+                <div class="card">
+                    <span>📥</span>
+                    <h3>Importação</h3>
+                    <p>Importe seus dados de uma planilha Excel.</p>
+                    <button onclick="mostrarPagina('importar')">Acessar</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- EQUIPAMENTOS -->
+        <section id="equipamentos" class="pagina">
+            <h2>Equipamentos cadastrados</h2>
+
+            <div class="pesquisa">
+                <input type="text" id="busca"
+                    placeholder="Pesquisar por servidor, série ou patrimônio"
+                    oninput="pesquisar()">
+
+                <button onclick="pesquisar()">Pesquisar</button>
+                <button class="botao-secundario" onclick="mostrarTodos()">
+                    Mostrar todos
+                </button>
             </div>
 
-            <nav>
-                <button class="menu-item ativo" onclick="mostrarPagina('inicio', this)">
-                    🏠 Início
+            <p id="contador">0 equipamentos encontrados</p>
+
+            <div class="tabela-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Servidor atual</th>
+                            <th>Nº Série</th>
+                            <th>Patrimônio</th>
+                            <th>Situação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultadoTabela"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SERVIDORES -->
+        <section id="servidores" class="pagina">
+            <h2>Servidores</h2>
+            <p>Servidores identificados nas movimentações importadas.</p>
+            <div id="listaServidores"></div>
+        </section>
+
+        <!-- IMPORTAÇÃO -->
+        <section id="importar" class="pagina">
+            <h2>Importar planilha Excel</h2>
+
+            <p>
+                Selecione uma planilha Excel (.xlsx ou .xls)
+                organizada nas seis colunas indicadas abaixo.
+            </p>
+
+            <div class="card">
+                <h3>Estrutura esperada da planilha</h3>
+                <ol>
+                    <li>Nome do servidor</li>
+                    <li>Número de patrimônio</li>
+                    <li>Série do equipamento</li>
+                    <li>Número do documento do pedido</li>
+                    <li>Data da movimentação</li>
+                    <li>Tipo: RETIRADA ou RESTITUIÇÃO</li>
+                </ol>
+            </div>
+
+            <div class="card">
+                <h3>Selecionar arquivo</h3>
+
+                <input type="file" id="arquivoExcel"
+                    accept=".xlsx,.xls">
+
+                <p id="mensagemImportacao">
+                    Nenhuma planilha selecionada.
+                </p>
+
+                <button onclick="lerPlanilha()">
+                    Ler e visualizar planilha
                 </button>
+            </div>
 
-                <button class="menu-item" onclick="mostrarPagina('equipamentos', this)">
-                    🖥️ Equipamentos
-                </button>
-
-                <button class="menu-item" onclick="mostrarPagina('servidores', this)">
-                    👥 Servidores
-                </button>
-
-                <button class="menu-item" onclick="mostrarPagina('importar', this)">
-                    📥 Importar planilha
-                </button>
-            </nav>
-        </aside>
-
-        <main class="conteudo">
-
-            <header class="topo">
-                <div>
-                    <h1>Sistema de Consulta de Cautelas de TI</h1>
-                    <p>Gerenciamento e consulta de equipamentos</p>
-                </div>
-            </header>
-
-            <section id="inicio" class="pagina ativa">
-
-                <h2>Bem-vindo ao DMIKA</h2>
-                <p>Selecione uma opção no menu para começar.</p>
-
-                <div class="cards">
-                    <div class="card">
-                        <span>🖥️</span>
-                        <h3>Equipamentos</h3>
-                        <p>Consulte os equipamentos cadastrados.</p>
-                        <button onclick="mostrarPagina('equipamentos')">
-                            Acessar
-                        </button>
-                    </div>
-
-                    <div class="card">
-                        <span>🔎</span>
-                        <h3>Pesquisa</h3>
-                        <p>Localize por série ou patrimônio.</p>
-                        <button onclick="mostrarPagina('equipamentos')">
-                            Pesquisar
-                        </button>
-                    </div>
-
-                    <div class="card">
-                        <span>📥</span>
-                        <h3>Importação</h3>
-                        <p>Importe seus dados futuramente.</p>
-                        <button onclick="mostrarPagina('importar')">
-                            Acessar
-                        </button>
-                    </div>
-                </div>
-
-            </section>
-
-            <section id="equipamentos" class="pagina">
-
-                <h2>Equipamentos cadastrados</h2>
-
-                <div class="pesquisa">
-                    <input
-                        type="text"
-                        id="busca"
-                        placeholder="Pesquisar por servidor, material, série ou patrimônio"
-                        oninput="pesquisar()"
-                    >
-
-                    <button onclick="pesquisar()">Pesquisar</button>
-                    <button class="botao-secundario" onclick="mostrarTodos()">
-                        Mostrar todos
-                    </button>
-                </div>
-
-                <p id="contador"></p>
+            <div id="areaPrevia" style="display:none;">
+                <h3>Prévia da importação</h3>
+                <p id="resumoImportacao"></p>
 
                 <div class="tabela-container">
                     <table>
                         <thead>
                             <tr>
                                 <th>Servidor</th>
-                                <th>Material</th>
-                                <th>Nº Série</th>
                                 <th>Patrimônio</th>
+                                <th>Série</th>
+                                <th>Documento</th>
+                                <th>Data</th>
+                                <th>Movimentação</th>
                             </tr>
                         </thead>
-
-                        <tbody id="resultadoTabela"></tbody>
+                        <tbody id="tabelaPrevia"></tbody>
                     </table>
                 </div>
 
-            </section>
+                <button id="botaoConfirmar" onclick="confirmarImportacao()">
+                    Confirmar importação
+                </button>
 
-            <section id="servidores" class="pagina">
-                <h2>Servidores</h2>
-                <p>Área reservada para consulta dos servidores cadastrados.</p>
-            </section>
+                <button class="botao-secundario" onclick="cancelarImportacao()">
+                    Cancelar
+                </button>
+            </div>
+        </section>
 
-            <section id="importar" class="pagina">
-                <h2>Importar planilha</h2>
-                <p>Esta área receberá a funcionalidade de importação Excel na próxima etapa.</p>
-            </section>
+        <!-- HISTÓRICO -->
+        <section id="historico" class="pagina">
+            <h2>Histórico de movimentações</h2>
+            <p>Consulte as retiradas e restituições importadas.</p>
 
-        </main>
+            <div class="pesquisa">
+                <input type="text" id="buscaHistorico"
+                    placeholder="Pesquisar por servidor, patrimônio ou documento"
+                    oninput="renderizarHistorico()">
+            </div>
 
-    </div>
+            <p id="contadorHistorico"></p>
+
+            <div class="tabela-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Servidor</th>
+                            <th>Patrimônio</th>
+                            <th>Série</th>
+                            <th>Documento</th>
+                            <th>Data</th>
+                            <th>Tipo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaHistorico"></tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 <script src="script.js"></script>
 
