@@ -1,142 +1,164 @@
 
-const equipamentos = [
-    {
-        servidor: "ANA ",
-        material: "Ultrabook Vaio",
-        numeroSerie: "89693074R",
-        patrimonio: "2024018048"
-    },
-    {
-        servidor: "BRUNO ",
-        material: "Servidor HP ProLiant DL380",
-        numeroSerie: "HP-7842A",
-        patrimonio: "2019029241"
-    },
-    {
-        servidor: "CAROLINA ",
-        material: "Storage Synology RS2423+",
-        numeroSerie: "SY-5567N",
-        patrimonio: "2022057214"
-    },
-    {
-        servidor: "EDUARDO ",
-        material: "Servidor Lenovo ThinkSystem",
-        numeroSerie: "LN-01349",
-        patrimonio: "2022057137"
-    },
-    {
-        servidor: "LUIZ ",
-        material: "Firewall Fortinet 100F",
-        numeroSerie: "PE0FBHM3",
-        patrimonio: "2026036354"
-    },
-    {
-        servidor: "FRANCISCO ",
-        material: "Impressora Multifuncional Ricoh",
-        numeroSerie: "89693215S",
-        patrimonio: "2024018167"
-    },
-    {
-        servidor: "KELMANN ",
-        material: "Notebook Dell Latitude 7440",
-        numeroSerie: "DL-91022",
-        patrimonio: "2019029321"
-    },
-    {
-        servidor: "VINÍCIUS",
-        material: "Switch Cisco Catalyst 9300",
-        numeroSerie: "CS-23488",
-        patrimonio: "2019069858"
-    }
+// ==========================================
+// DMIKA - Sistema de Consulta de Cautelas de TI
+// ==========================================
+
+// Lista inicial de equipamentos para testes.
+// Depois poderemos substituir esses dados pela planilha.
+let equipamentos = [
+  {
+    servidor: "SERVIDOR DE TESTE 01",
+    material: "Notebook Dell",
+    numeroSerie: "DELL-001",
+    patrimonio: "2024000001"
+  },
+  {
+    servidor: "SERVIDOR DE TESTE 02",
+    material: "Monitor LG",
+    numeroSerie: "LG-002",
+    patrimonio: "2024000002"
+  },
+  {
+    servidor: "SERVIDOR DE TESTE 03",
+    material: "Teclado",
+    numeroSerie: "TEC-003",
+    patrimonio: "2024000003"
+  }
 ];
 
-// Abre uma página do sistema
-function mostrarPagina(pagina, botao) {
+// ==========================================
+// NAVEGAÇÃO ENTRE AS TELAS
+// ==========================================
 
-    document.querySelectorAll(".pagina").forEach(item => {
-        item.classList.remove("ativa");
+window.mostrarPagina = function(pagina, botao) {
+  // Esconde todas as páginas
+  document.querySelectorAll(".pagina").forEach(function(item) {
+    item.classList.remove("ativa");
+  });
+
+  // Mostra a página escolhida
+  const paginaSelecionada = document.getElementById(pagina);
+
+  if (paginaSelecionada) {
+    paginaSelecionada.classList.add("ativa");
+  } else {
+    console.error("Página não encontrada:", pagina);
+    return;
+  }
+
+  // Atualiza o botão selecionado no menu
+  document.querySelectorAll(".menu-item").forEach(function(item) {
+    item.classList.remove("ativo");
+  });
+
+  if (botao) {
+    botao.classList.add("ativo");
+  }
+
+  // Ao abrir equipamentos, mostra a lista completa
+  if (pagina === "equipamentos") {
+    mostrarTodos();
+  }
+};
+
+// ==========================================
+// CARREGAR TABELA DE EQUIPAMENTOS
+// ==========================================
+
+window.carregarTabela = function(lista) {
+  const tabela = document.getElementById("resultadoTabela");
+  const contador = document.getElementById("contador");
+
+  if (!tabela) {
+    console.error("Não encontrei a tabela resultadoTabela no HTML.");
+    return;
+  }
+
+  tabela.innerHTML = "";
+
+  lista.forEach(function(item) {
+    const linha = document.createElement("tr");
+
+    const valores = [
+      item.servidor,
+      item.material,
+      item.numeroSerie,
+      item.patrimonio
+    ];
+
+    valores.forEach(function(valor) {
+      const coluna = document.createElement("td");
+      coluna.textContent = valor || "";
+      linha.appendChild(coluna);
     });
 
-    document.getElementById(pagina).classList.add("ativa");
+    tabela.appendChild(linha);
+  });
 
-    document.querySelectorAll(".menu-item").forEach(item => {
-        item.classList.remove("ativo");
-    });
-
-    if (botao) {
-        botao.classList.add("ativo");
-    } else {
-        const botoes = document.querySelectorAll(".menu-item");
-
-        botoes.forEach(item => {
-            if (item.getAttribute("onclick").includes(pagina)) {
-                item.classList.add("ativo");
-            }
-        });
-    }
-
-    if (pagina === "equipamentos") {
-        mostrarTodos();
-    }
-}
-
-// Monta a tabela
-function carregarTabela(lista) {
-
-    const tabela = document.getElementById("resultadoTabela");
-    const contador = document.getElementById("contador");
-
-    tabela.innerHTML = "";
-
-    lista.forEach(item => {
-
-        const linha = document.createElement("tr");
-
-        [
-            item.servidor,
-            item.material,
-            item.numeroSerie,
-            item.patrimonio
-        ].forEach(valor => {
-
-            const coluna = document.createElement("td");
-            coluna.textContent = valor;
-            linha.appendChild(coluna);
-
-        });
-
-        tabela.appendChild(linha);
-    });
-
+  if (contador) {
     contador.textContent =
-        lista.length + (lista.length === 1
-            ? " equipamento encontrado"
-            : " equipamentos encontrados");
-}
+      lista.length +
+      (lista.length === 1
+        ? " equipamento encontrado"
+        : " equipamentos encontrados");
+  }
+};
 
-// Pesquisa automática
-function pesquisar() {
+// ==========================================
+// PESQUISAR EQUIPAMENTOS
+// ==========================================
 
-    const termo = document
-        .getElementById("busca")
-        .value
-        .trim()
-        .toLowerCase();
+window.pesquisar = function() {
+  const campoBusca = document.getElementById("busca");
 
-    const resultado = equipamentos.filter(item =>
-        item.servidor.toLowerCase().includes(termo) ||
-        item.material.toLowerCase().includes(termo) ||
-        item.numeroSerie.toLowerCase().includes(termo) ||
-        item.patrimonio.toLowerCase().includes(termo)
+  if (!campoBusca) {
+    console.error("Campo de pesquisa não encontrado.");
+    return;
+  }
+
+  const termo = campoBusca.value.trim().toLowerCase();
+
+  const resultado = equipamentos.filter(function(item) {
+    return (
+      String(item.servidor).toLowerCase().includes(termo) ||
+      String(item.material).toLowerCase().includes(termo) ||
+      String(item.numeroSerie).toLowerCase().includes(termo) ||
+      String(item.patrimonio).toLowerCase().includes(termo)
     );
+  });
 
-    carregarTabela(resultado);
-}
+  carregarTabela(resultado);
+};
 
-// Mostra todos os equipamentos
-function mostrarTodos() {
+// ==========================================
+// MOSTRAR TODOS OS EQUIPAMENTOS
+// ==========================================
 
-    document.getElementById("busca").value = "";
+window.mostrarTodos = function() {
+  const campoBusca = document.getElementById("busca");
 
-    carregarTabela(equipamentos);
-}
+  if (campoBusca) {
+    campoBusca.value = "";
+  }
+
+  carregarTabela(equipamentos);
+};
+
+// ==========================================
+// INICIALIZAÇÃO DO SISTEMA
+// ==========================================
+
+document.addEventListener("DOMContentLoaded", function() {
+  console.log("DMIKA carregado com sucesso!");
+
+  // Deixa a página inicial visível
+  const inicio = document.getElementById("inicio");
+
+  if (inicio) {
+    document.querySelectorAll(".pagina").forEach(function(item) {
+      item.classList.remove("ativa");
+    });
+
+    inicio.classList.add("ativa");
+  }
+});
