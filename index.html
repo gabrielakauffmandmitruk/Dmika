@@ -1,51 +1,141 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Consulta de Cautelas TI</title>
+    <title>MIKAH | Controle de Equipamentos</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <div class="container">
+    <div class="layout">
 
-        <div class="logo">
-            <img src="logo-dmika.png" alt="Logo DMIKA">
-        </div>
+        <aside class="menu">
+            <div class="logo">
+                <img src="logo-dmika.png" alt="Logo MIKAH">
+                <h2>MIKAH</h2>
+                <p>CONTROLE DE TI</p>
+            </div>
 
-        <h1>Sistema de Consulta de Cautelas de TI</h1>
+            <nav>
+                <button class="menu-item ativo" onclick="mostrarPagina('inicio', this)">
+                    🏠 Início
+                </button>
 
-        <div class="pesquisa">
-            <input type="text"
-                id="busca"
-                placeholder="Pesquisar por servidor, material, série ou patrimônio">
+                <button class="menu-item" onclick="mostrarPagina('equipamentos', this)">
+                    🖥️ Equipamentos
+                </button>
 
-            <button onclick="pesquisar()">
-                Pesquisar
-            </button>
-        </div>
+                <button class="menu-item" onclick="mostrarPagina('servidores', this)">
+                    👥 Servidores
+                </button>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Servidor</th>
-                    <th>Material</th>
-                    <th>Nº Série</th>
-                    <th>Patrimônio</th>
-                </tr>
-            </thead>
+                <button class="menu-item" onclick="mostrarPagina('importar', this)">
+                    📥 Importar planilha
+                </button>
+            </nav>
+        </aside>
 
-            <tbody id="resultadoTabela">
-            </tbody>
-        </table>
+        <main class="conteudo">
+
+            <header class="topo">
+                <div>
+                    <h1>Sistema de Consulta de Cautelas de TI</h1>
+                    <p>Gerenciamento e consulta de equipamentos</p>
+                </div>
+            </header>
+
+            <section id="inicio" class="pagina ativa">
+
+                <h2>Bem-vindo ao MIKAH</h2>
+                <p>Selecione uma opção no menu para começar.</p>
+
+                <div class="cards">
+                    <div class="card">
+                        <span>🖥️</span>
+                        <h3>Equipamentos</h3>
+                        <p>Consulte os equipamentos cadastrados.</p>
+                        <button onclick="mostrarPagina('equipamentos')">
+                            Acessar
+                        </button>
+                    </div>
+
+                    <div class="card">
+                        <span>🔎</span>
+                        <h3>Pesquisa</h3>
+                        <p>Localize por série ou patrimônio.</p>
+                        <button onclick="mostrarPagina('equipamentos')">
+                            Pesquisar
+                        </button>
+                    </div>
+
+                    <div class="card">
+                        <span>📥</span>
+                        <h3>Importação</h3>
+                        <p>Importe seus dados futuramente.</p>
+                        <button onclick="mostrarPagina('importar')">
+                            Acessar
+                        </button>
+                    </div>
+                </div>
+
+            </section>
+
+            <section id="equipamentos" class="pagina">
+
+                <h2>Equipamentos cadastrados</h2>
+
+                <div class="pesquisa">
+                    <input
+                        type="text"
+                        id="busca"
+                        placeholder="Pesquisar por servidor, material, série ou patrimônio"
+                        oninput="pesquisar()"
+                    >
+
+                    <button onclick="pesquisar()">Pesquisar</button>
+                    <button class="botao-secundario" onclick="mostrarTodos()">
+                        Mostrar todos
+                    </button>
+                </div>
+
+                <p id="contador"></p>
+
+                <div class="tabela-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Servidor</th>
+                                <th>Material</th>
+                                <th>Nº Série</th>
+                                <th>Patrimônio</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="resultadoTabela"></tbody>
+                    </table>
+                </div>
+
+            </section>
+
+            <section id="servidores" class="pagina">
+                <h2>Servidores</h2>
+                <p>Área reservada para consulta dos servidores cadastrados.</p>
+            </section>
+
+            <section id="importar" class="pagina">
+                <h2>Importar planilha</h2>
+                <p>Esta área receberá a funcionalidade de importação Excel na próxima etapa.</p>
+            </section>
+
+        </main>
 
     </div>
 
     <script src="script.js"></script>
 
 </body>
-
 </html>
