@@ -114,70 +114,100 @@
         </section>
 
         <!-- IMPORTAÇÃO -->
-        <section id="importar" class="pagina">
-            <h2>Importar planilha Excel</h2>
+      
+<section id="importar" class="pagina">
+    <h2>Gerenciar equipamentos</h2>
 
-            <p>
-                Selecione uma planilha Excel (.xlsx ou .xls)
-                organizada nas seis colunas indicadas abaixo.
-            </p>
+    <!-- CADASTRO MANUAL -->
+    <div class="card">
+        <h3>➕ Cadastrar equipamento individualmente</h3>
+        <p>Cadastre um equipamento diretamente pelo DMIKA.</p>
 
-            <div class="card">
-                <h3>Estrutura esperada da planilha</h3>
-                <ol>
-                    <li>Nome do servidor</li>
-                    <li>Número de patrimônio</li>
-                    <li>Série do equipamento</li>
-                    <li>Número do documento do pedido</li>
-                    <li>Data da movimentação</li>
-                    <li>Tipo: RETIRADA ou RESTITUIÇÃO</li>
-                </ol>
-            </div>
+        <label>Nome do servidor (deixe vazio se estiver disponível)</label>
+        <input type="text" id="manualServidor"
+            placeholder="Nome do servidor">
 
-            <div class="card">
-                <h3>Selecionar arquivo</h3>
+        <label>Número de patrimônio *</label>
+        <input type="text" id="manualPatrimonio"
+            placeholder="Número do patrimônio">
 
-                <input type="file" id="arquivoExcel"
-                    accept=".xlsx,.xls">
+        <label>Número de série *</label>
+        <input type="text" id="manualSerie"
+            placeholder="Número de série">
 
-                <p id="mensagemImportacao">
-                    Nenhuma planilha selecionada.
-                </p>
+        <label>Número do documento</label>
+        <input type="text" id="manualDocumento"
+            placeholder="Número do documento">
 
-                <button onclick="lerPlanilha()">
-                    Ler e visualizar planilha
-                </button>
-            </div>
+        <label>Data do cadastro *</label>
+        <input type="date" id="manualData">
 
-            <div id="areaPrevia" style="display:none;">
-                <h3>Prévia da importação</h3>
-                <p id="resumoImportacao"></p>
+        <label>Situação inicial *</label>
+        <select id="manualSituacao">
+            <option value="DISPONIVEL">Disponível</option>
+            <option value="EM_USO">Em uso</option>
+        </select>
 
-                <div class="tabela-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Servidor</th>
-                                <th>Patrimônio</th>
-                                <th>Série</th>
-                                <th>Documento</th>
-                                <th>Data</th>
-                                <th>Movimentação</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabelaPrevia"></tbody>
-                    </table>
-                </div>
+        <button onclick="cadastrarManual()">
+            Cadastrar equipamento
+        </button>
+    </div>
 
-                <button id="botaoConfirmar" onclick="confirmarImportacao()">
-                    Confirmar importação
-                </button>
+    <!-- IMPORTAÇÃO EXCEL -->
+    <div class="card">
+        <h3>📥 Importar planilha Excel</h3>
 
-                <button class="botao-secundario" onclick="cancelarImportacao()">
-                    Cancelar
-                </button>
-            </div>
-        </section>
+        <p>Estrutura esperada da planilha:</p>
+        <ol>
+            <li>Nome do servidor</li>
+            <li>Número de patrimônio</li>
+            <li>Série do equipamento</li>
+            <li>Número do documento do pedido</li>
+            <li>Data da movimentação</li>
+            <li>Tipo: RETIRADA ou RESTITUIÇÃO</li>
+        </ol>
+
+        <input type="file" id="arquivoExcel"
+            accept=".xlsx,.xls">
+
+        <p id="mensagemImportacao">
+            Nenhuma planilha selecionada.
+        </p>
+
+        <button onclick="lerPlanilha()">
+            Ler e visualizar planilha
+        </button>
+    </div>
+
+    <div id="areaPrevia" style="display:none;">
+        <h3>Prévia da importação</h3>
+        <p id="resumoImportacao"></p>
+
+        <div class="tabela-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Servidor</th>
+                        <th>Patrimônio</th>
+                        <th>Série</th>
+                        <th>Documento</th>
+                        <th>Data</th>
+                        <th>Movimentação</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelaPrevia"></tbody>
+            </table>
+        </div>
+
+        <button id="botaoConfirmar" onclick="confirmarImportacao()">
+            Confirmar importação
+        </button>
+
+        <button class="botao-secundario" onclick="cancelarImportacao()">
+            Cancelar
+        </button>
+    </div>
+</section>
 
         <!-- HISTÓRICO -->
         <section id="historico" class="pagina">
