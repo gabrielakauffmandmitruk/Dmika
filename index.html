@@ -51,178 +51,257 @@
             <p>Selecione uma opção no menu para começar.</p>
 
             <div class="cards">
+
                 <div class="card">
                     <span>🖥️</span>
                     <h3>Equipamentos</h3>
                     <p>Consulte os equipamentos cadastrados.</p>
-                    <button onclick="mostrarPagina('equipamentos')">Acessar</button>
+                    <button onclick="mostrarPagina('equipamentos')">
+                        Acessar
+                    </button>
                 </div>
 
                 <div class="card">
                     <span>👥</span>
                     <h3>Servidores</h3>
                     <p>Consulte os servidores e seus equipamentos.</p>
-                    <button onclick="mostrarPagina('servidores')">Acessar</button>
+                    <button onclick="mostrarPagina('servidores')">
+                        Acessar
+                    </button>
                 </div>
 
                 <div class="card">
                     <span>📥</span>
                     <h3>Importação</h3>
                     <p>Importe seus dados de uma planilha Excel.</p>
-                    <button onclick="mostrarPagina('importar')">Acessar</button>
+                    <button onclick="mostrarPagina('importar')">
+                        Acessar
+                    </button>
                 </div>
+
             </div>
         </section>
 
         <!-- EQUIPAMENTOS -->
         <section id="equipamentos" class="pagina">
+
             <h2>Equipamentos cadastrados</h2>
 
             <div class="pesquisa">
-                <input type="text" id="busca"
-                    placeholder="Pesquisar por servidor, série ou patrimônio"
-                    oninput="pesquisar()">
+
+                <input
+                    type="text"
+                    id="busca"
+                    placeholder="Pesquisar por servidor, tipo, série ou patrimônio"
+                    oninput="pesquisar()"
+                >
 
                 <button onclick="pesquisar()">Pesquisar</button>
+
                 <button class="botao-secundario" onclick="mostrarTodos()">
                     Mostrar todos
                 </button>
+
             </div>
 
             <p id="contador">0 equipamentos encontrados</p>
 
             <div class="tabela-container">
+
                 <table>
                     <thead>
                         <tr>
                             <th>Servidor atual</th>
+                            <th>Tipo de equipamento</th>
                             <th>Nº Série</th>
                             <th>Patrimônio</th>
                             <th>Situação</th>
                         </tr>
                     </thead>
+
                     <tbody id="resultadoTabela"></tbody>
                 </table>
+
             </div>
         </section>
 
         <!-- SERVIDORES -->
         <section id="servidores" class="pagina">
+
             <h2>Servidores</h2>
+
             <p>Servidores identificados nas movimentações importadas.</p>
+
             <div id="listaServidores"></div>
+
         </section>
 
-        <!-- IMPORTAÇÃO -->
-      
-<section id="importar" class="pagina">
-    <h2>Gerenciar equipamentos</h2>
+        <!-- IMPORTAÇÃO E CADASTRO -->
+        <section id="importar" class="pagina">
 
-    <!-- CADASTRO MANUAL -->
-    <div class="card">
-        <h3>➕ Cadastrar equipamento individualmente</h3>
-        <p>Cadastre um equipamento diretamente pelo DMIKA.</p>
+            <h2>Gerenciar equipamentos</h2>
 
-        <label>Nome do servidor (deixe vazio se estiver disponível)</label>
-        <input type="text" id="manualServidor"
-            placeholder="Nome do servidor">
+            <!-- CADASTRO MANUAL -->
+            <div class="card">
 
-        <label>Número de patrimônio *</label>
-        <input type="text" id="manualPatrimonio"
-            placeholder="Número do patrimônio">
+                <h3>➕ Cadastrar equipamento individualmente</h3>
 
-        <label>Número de série *</label>
-        <input type="text" id="manualSerie"
-            placeholder="Número de série">
+                <p>Cadastre um equipamento diretamente pelo DMIKA.</p>
 
-        <label>Número do documento</label>
-        <input type="text" id="manualDocumento"
-            placeholder="Número do documento">
+                <label>Nome do servidor (deixe vazio se estiver disponível)</label>
 
-        <label>Data do cadastro *</label>
-        <input type="date" id="manualData">
+                <input
+                    type="text"
+                    id="manualServidor"
+                    placeholder="Nome do servidor"
+                >
 
-        <label>Situação inicial *</label>
-        <select id="manualSituacao">
-            <option value="DISPONIVEL">Disponível</option>
-            <option value="EM_USO">Em uso</option>
-        </select>
+                <label>Tipo de equipamento *</label>
 
-        <button onclick="cadastrarManual()">
-            Cadastrar equipamento
-        </button>
-    </div>
+                <input
+                    type="text"
+                    id="manualTipoEquipamento"
+                    placeholder="Ex.: Ultrabook, Monitor, Impressora"
+                >
 
-    <!-- IMPORTAÇÃO EXCEL -->
-    <div class="card">
-        <h3>📥 Importar planilha Excel</h3>
+                <label>Número de patrimônio *</label>
 
-        <p>Estrutura esperada da planilha:</p>
-        <ol>
-            <li>Nome do servidor</li>
-            <li>Número de patrimônio</li>
-            <li>Série do equipamento</li>
-            <li>Número do documento do pedido</li>
-            <li>Data da movimentação</li>
-            <li>Tipo: RETIRADA ou RESTITUIÇÃO</li>
-        </ol>
+                <input
+                    type="text"
+                    id="manualPatrimonio"
+                    placeholder="Número do patrimônio"
+                >
 
-        <input type="file" id="arquivoExcel"
-            accept=".xlsx,.xls">
+                <label>Número de série *</label>
 
-        <p id="mensagemImportacao">
-            Nenhuma planilha selecionada.
-        </p>
+                <input
+                    type="text"
+                    id="manualSerie"
+                    placeholder="Número de série"
+                >
 
-        <button onclick="lerPlanilha()">
-            Ler e visualizar planilha
-        </button>
-    </div>
+                <label>Número do documento</label>
 
-    <div id="areaPrevia" style="display:none;">
-        <h3>Prévia da importação</h3>
-        <p id="resumoImportacao"></p>
+                <input
+                    type="text"
+                    id="manualDocumento"
+                    placeholder="Número do documento"
+                >
 
-        <div class="tabela-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Servidor</th>
-                        <th>Patrimônio</th>
-                        <th>Série</th>
-                        <th>Documento</th>
-                        <th>Data</th>
-                        <th>Movimentação</th>
-                    </tr>
-                </thead>
-                <tbody id="tabelaPrevia"></tbody>
-            </table>
-        </div>
+                <label>Data do cadastro *</label>
 
-        <button id="botaoConfirmar" onclick="confirmarImportacao()">
-            Confirmar importação
-        </button>
+                <input
+                    type="date"
+                    id="manualData"
+                >
 
-        <button class="botao-secundario" onclick="cancelarImportacao()">
-            Cancelar
-        </button>
-    </div>
-</section>
+                <label>Situação inicial *</label>
+
+                <select id="manualSituacao">
+                    <option value="DISPONIVEL">Disponível</option>
+                    <option value="EM_USO">Em uso</option>
+                </select>
+
+                <button onclick="cadastrarManual()">
+                    Cadastrar equipamento
+                </button>
+
+            </div>
+
+            <!-- IMPORTAÇÃO EXCEL -->
+            <div class="card">
+
+                <h3>📥 Importar planilha Excel</h3>
+
+                <p>Estrutura esperada da planilha:</p>
+
+                <ol>
+                    <li>Nome do servidor</li>
+                    <li>Número de patrimônio</li>
+                    <li>Série do equipamento</li>
+                    <li>Número do documento do pedido</li>
+                    <li>Data da movimentação</li>
+                    <li>Tipo de movimentação: RETIRADA ou RESTITUIÇÃO</li>
+                    <li>Tipo de equipamento: Ultrabook, Monitor, Impressora etc.</li>
+                </ol>
+
+                <input
+                    type="file"
+                    id="arquivoExcel"
+                    accept=".xlsx,.xls"
+                >
+
+                <p id="mensagemImportacao">
+                    Nenhuma planilha selecionada.
+                </p>
+
+                <button onclick="lerPlanilha()">
+                    Ler e visualizar planilha
+                </button>
+
+            </div>
+
+            <!-- PRÉVIA -->
+            <div id="areaPrevia" style="display:none;">
+
+                <h3>Prévia da importação</h3>
+
+                <p id="resumoImportacao"></p>
+
+                <div class="tabela-container">
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Servidor</th>
+                                <th>Patrimônio</th>
+                                <th>Série</th>
+                                <th>Documento</th>
+                                <th>Data</th>
+                                <th>Movimentação</th>
+                                <th>Tipo de equipamento</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="tabelaPrevia"></tbody>
+                    </table>
+
+                </div>
+
+                <button id="botaoConfirmar" onclick="confirmarImportacao()">
+                    Confirmar importação
+                </button>
+
+                <button class="botao-secundario" onclick="cancelarImportacao()">
+                    Cancelar
+                </button>
+
+            </div>
+
+        </section>
 
         <!-- HISTÓRICO -->
         <section id="historico" class="pagina">
+
             <h2>Histórico de movimentações</h2>
+
             <p>Consulte as retiradas e restituições importadas.</p>
 
             <div class="pesquisa">
-                <input type="text" id="buscaHistorico"
-                    placeholder="Pesquisar por servidor, patrimônio ou documento"
-                    oninput="renderizarHistorico()">
+
+                <input
+                    type="text"
+                    id="buscaHistorico"
+                    placeholder="Pesquisar por servidor, tipo, patrimônio ou documento"
+                    oninput="renderizarHistorico()"
+                >
+
             </div>
 
             <p id="contadorHistorico"></p>
 
             <div class="tabela-container">
+
                 <table>
                     <thead>
                         <tr>
@@ -231,12 +310,16 @@
                             <th>Série</th>
                             <th>Documento</th>
                             <th>Data</th>
-                            <th>Tipo</th>
+                            <th>Tipo de movimentação</th>
+                            <th>Tipo de equipamento</th>
                         </tr>
                     </thead>
+
                     <tbody id="tabelaHistorico"></tbody>
                 </table>
+
             </div>
+
         </section>
 
     </main>
