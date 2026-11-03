@@ -10,14 +10,17 @@ let equipamentos = [];
 let previaImportacao = [];
 
 // ==================================================
-// 1. ARMAZENAMENTO DOS DADOS
+// 1. ARMAZENAMENTO
 // ==================================================
 
 function carregarArmazenamento() {
     try {
-        return JSON.parse(
+        const dados = JSON.parse(
             localStorage.getItem(CHAVE_MOVIMENTACOES)
-        ) || [];
+        );
+
+        return Array.isArray(dados) ? dados : [];
+
     } catch (erro) {
         console.error("Erro ao carregar dados:", erro);
         return [];
@@ -30,19 +33,24 @@ function salvarArmazenamento() {
             CHAVE_MOVIMENTACOES,
             JSON.stringify(movimentacoes)
         );
+
         return true;
+
     } catch (erro) {
         console.error("Erro ao salvar:", erro);
+
         alert("Não foi possível salvar os dados neste navegador.");
+
         return false;
     }
 }
 
 // ==================================================
-// 2. NAVEGAÇÃO ENTRE AS PÁGINAS
+// 2. NAVEGAÇÃO
 // ==================================================
 
 window.mostrarPagina = function(pagina, botao) {
+
     document.querySelectorAll(".pagina").forEach(function(item) {
         item.classList.remove("ativa");
     });
@@ -86,6 +94,7 @@ window.mostrarPagina = function(pagina, botao) {
 // ==================================================
 
 function valorTexto(valor) {
+
     if (valor === null || valor === undefined) {
         return "";
     }
@@ -94,11 +103,13 @@ function valorTexto(valor) {
 }
 
 function formatarData(valor) {
+
     if (valor === null || valor === undefined || valor === "") {
         return "";
     }
 
     if (valor instanceof Date && !isNaN(valor)) {
+
         return [
             String(valor.getDate()).padStart(2, "0"),
             String(valor.getMonth() + 1).padStart(2, "0"),
@@ -107,9 +118,11 @@ function formatarData(valor) {
     }
 
     if (typeof valor === "number" && window.XLSX) {
+
         const data = XLSX.SSF.parse_date_code(valor);
 
         if (data) {
+
             return [
                 String(data.d).padStart(2, "0"),
                 String(data.m).padStart(2, "0"),
@@ -122,6 +135,7 @@ function formatarData(valor) {
 }
 
 function normalizarTexto(valor) {
+
     return valorTexto(valor)
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
@@ -129,9 +143,13 @@ function normalizarTexto(valor) {
 }
 
 function identificarTipo(valor) {
+
     const tipo = normalizarTexto(valor);
 
-    if (tipo.includes("RESTITUI") || tipo.includes("DEVOLU")) {
+    if (
+        tipo.includes("RESTITUI") ||
+        tipo.includes("DEVOLU")
+    ) {
         return "RESTITUIÇÃO";
     }
 
@@ -143,11 +161,15 @@ function identificarTipo(valor) {
 }
 
 function converterDataParaNumero(valor) {
+
     const texto = valorTexto(valor);
 
-    const brasileira = texto.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+    const brasileira = texto.match(
+        /^(\d{2})\/(\d{2})\/(\d{4})$/
+    );
 
     if (brasileira) {
+
         return new Date(
             Number(brasileira[3]),
             Number(brasileira[2]) - 1,
@@ -165,11 +187,13 @@ function converterDataParaNumero(valor) {
 }
 
 // ==================================================
-// 4. IMPORTAÇÃO DA PLANILHA EXCEL
+// 4. IMPORTAÇÃO DO EXCEL
 // ==================================================
 
 window.lerPlanilha = async function() {
+
     const arquivo = document.getElementById("arquivoExcel").files[0];
+
     const mensagem = document.getElementById("mensagemImportacao");
 
     if (!arquivo) {
@@ -183,6 +207,7 @@ window.lerPlanilha = async function() {
     }
 
     try {
+
         mensagem.textContent = "Lendo planilha...";
 
         const dados = await arquivo.arrayBuffer();
@@ -193,6 +218,7 @@ window.lerPlanilha = async function() {
         });
 
         const primeiraAba = pasta.SheetNames[0];
+
         const planilha = pasta.Sheets[primeiraAba];
 
         const linhas = XLSX.utils.sheet_to_json(planilha, {
@@ -202,8 +228,11 @@ window.lerPlanilha = async function() {
         });
 
         if (!linhas || linhas.length === 0) {
+
             alert("A planilha está vazia.");
+
             mensagem.textContent = "Planilha vazia.";
+
             return;
         }
 
@@ -226,14 +255,23 @@ window.lerPlanilha = async function() {
         }
 
         for (let i = inicio; i < linhas.length; i++) {
+
             const linha = linhas[i];
 
             const servidor = valorTexto(linha[0]);
+
             const patrimonio = valorTexto(linha[1]);
+
             const serie = valorTexto(linha[2]);
+
             const documento = valorTexto(linha[3]);
+
             const data = formatarData(linha[4]);
+
             const tipo = identificarTipo(linha[5]);
+
+            const tipoEquipamento =
+                valorTexto(linha[6]) || "Não informado";
 
             if (
                 !servidor &&
@@ -241,24 +279,37 @@ window.lerPlanilha = async function() {
                 !serie &&
                 !documento &&
                 !data &&
-                !valorTexto(linha[5])
+                !valorTexto(linha[5]) &&
+                !valorTexto(linha[6])
             ) {
                 continue;
             }
 
             previaImportacao.push({
+
                 servidor: servidor,
+
                 patrimonio: patrimonio,
+
                 serie: serie,
+
                 documento: documento,
+
                 data: data,
-                tipo: tipo
+
+                tipo: tipo,
+
+                tipoEquipamento: tipoEquipamento
+
             });
         }
 
         if (previaImportacao.length === 0) {
+
             alert("Nenhum registro encontrado.");
+
             mensagem.textContent = "Nenhum registro encontrado.";
+
             return;
         }
 
@@ -268,8 +319,11 @@ window.lerPlanilha = async function() {
             arquivo.name + " selecionado com sucesso.";
 
     } catch (erro) {
+
         console.error("Erro na leitura:", erro);
+
         alert("Não foi possível ler a planilha.");
+
         mensagem.textContent = "Erro ao ler a planilha.";
     }
 };
@@ -279,30 +333,47 @@ window.lerPlanilha = async function() {
 // ==================================================
 
 function mostrarPrevia() {
+
     const area = document.getElementById("areaPrevia");
+
     const tabela = document.getElementById("tabelaPrevia");
+
     const resumo = document.getElementById("resumoImportacao");
 
     tabela.innerHTML = "";
 
     let validos = 0;
+
     let invalidos = 0;
 
     previaImportacao.forEach(function(item) {
+
         const linha = document.createElement("tr");
 
         const campos = [
+
             item.servidor,
+
             item.patrimonio,
+
             item.serie,
+
             item.documento,
+
             item.data,
-            item.tipo || "TIPO NÃO RECONHECIDO"
+
+            item.tipo || "TIPO NÃO RECONHECIDO",
+
+            item.tipoEquipamento
+
         ];
 
         campos.forEach(function(valor) {
+
             const coluna = document.createElement("td");
-            coluna.textContent = valor;
+
+            coluna.textContent = valor || "";
+
             linha.appendChild(coluna);
         });
 
@@ -326,7 +397,8 @@ function mostrarPrevia() {
         validos + " válido(s) e " +
         invalidos + " inválido(s).";
 
-    document.getElementById("botaoConfirmar").disabled = validos === 0;
+    document.getElementById("botaoConfirmar").disabled =
+        validos === 0;
 
     area.style.display = "block";
 }
@@ -336,12 +408,19 @@ function mostrarPrevia() {
 // ==================================================
 
 function chaveMovimentacao(item) {
+
     return [
+
         item.patrimonio,
+
         item.serie,
+
         item.documento,
+
         item.data,
+
         item.tipo
+
     ].map(valor => normalizarTexto(valor)).join("|");
 }
 
@@ -350,15 +429,19 @@ function chaveMovimentacao(item) {
 // ==================================================
 
 window.confirmarImportacao = function() {
+
     const existentes = new Set(
         movimentacoes.map(chaveMovimentacao)
     );
 
     let importados = 0;
+
     let duplicados = 0;
+
     let invalidos = 0;
 
     previaImportacao.forEach(function(item) {
+
         if (
             !item.servidor ||
             !item.patrimonio ||
@@ -373,27 +456,36 @@ window.confirmarImportacao = function() {
         const chave = chaveMovimentacao(item);
 
         if (existentes.has(chave)) {
+
             duplicados++;
+
             return;
         }
 
         movimentacoes.push(item);
+
         existentes.add(chave);
+
         importados++;
     });
 
     if (importados === 0) {
+
         alert(
             "Nenhum registro novo foi importado.\n\n" +
             "Duplicados: " + duplicados +
             "\nInválidos: " + invalidos
         );
+
         return;
     }
 
     if (!salvarArmazenamento()) {
+
         movimentacoes = carregarArmazenamento();
+
         atualizarEquipamentos();
+
         return;
     }
 
@@ -407,6 +499,7 @@ window.confirmarImportacao = function() {
     );
 
     cancelarImportacao();
+
     mostrarPagina("equipamentos");
 };
 
@@ -415,9 +508,11 @@ window.confirmarImportacao = function() {
 // ==================================================
 
 window.cancelarImportacao = function() {
+
     previaImportacao = [];
 
     document.getElementById("arquivoExcel").value = "";
+
     document.getElementById("areaPrevia").style.display = "none";
 
     document.getElementById("mensagemImportacao").textContent =
@@ -429,45 +524,89 @@ window.cancelarImportacao = function() {
 // ==================================================
 
 window.cadastrarManual = function() {
-    const servidor = document.getElementById("manualServidor").value.trim();
-    const patrimonio = document.getElementById("manualPatrimonio").value.trim();
-    const serie = document.getElementById("manualSerie").value.trim();
-    const documento = document.getElementById("manualDocumento").value.trim();
-    const dataCampo = document.getElementById("manualData").value;
-    const situacao = document.getElementById("manualSituacao").value;
 
-    if (!patrimonio || !serie || !dataCampo) {
-        alert("Preencha o patrimônio, a série e a data.");
+    const servidor = document
+        .getElementById("manualServidor").value.trim();
+
+    const tipoEquipamento = document
+        .getElementById("manualTipoEquipamento").value.trim();
+
+    const patrimonio = document
+        .getElementById("manualPatrimonio").value.trim();
+
+    const serie = document
+        .getElementById("manualSerie").value.trim();
+
+    const documento = document
+        .getElementById("manualDocumento").value.trim();
+
+    const dataCampo = document
+        .getElementById("manualData").value;
+
+    const situacao = document
+        .getElementById("manualSituacao").value;
+
+    if (
+        !tipoEquipamento ||
+        !patrimonio ||
+        !serie ||
+        !dataCampo
+    ) {
+
+        alert(
+            "Preencha o tipo de equipamento, patrimônio, série e data."
+        );
+
         return;
     }
 
     if (situacao === "EM_USO" && !servidor) {
+
         alert("Informe o servidor responsável pelo equipamento.");
+
         return;
     }
 
     const patrimonioExistente = movimentacoes.some(function(item) {
-        return normalizarTexto(item.patrimonio) === normalizarTexto(patrimonio);
+
+        return normalizarTexto(item.patrimonio) ===
+            normalizarTexto(patrimonio);
+
     });
 
     if (patrimonioExistente) {
+
         alert("Esse patrimônio já possui registros no DMIKA.");
+
         return;
     }
 
     const novoRegistro = {
+
         servidor: servidor,
+
+        tipoEquipamento: tipoEquipamento,
+
         patrimonio: patrimonio,
+
         serie: serie,
+
         documento: documento,
+
         data: dataCampo.split("-").reverse().join("/"),
-        tipo: situacao === "DISPONIVEL" ? "CADASTRO" : "RETIRADA"
+
+        tipo: situacao === "DISPONIVEL"
+            ? "CADASTRO"
+            : "RETIRADA"
+
     };
 
     movimentacoes.push(novoRegistro);
 
     if (!salvarArmazenamento()) {
+
         movimentacoes.pop();
+
         return;
     }
 
@@ -476,10 +615,17 @@ window.cadastrarManual = function() {
     alert("Equipamento cadastrado com sucesso!");
 
     document.getElementById("manualServidor").value = "";
+
+    document.getElementById("manualTipoEquipamento").value = "";
+
     document.getElementById("manualPatrimonio").value = "";
+
     document.getElementById("manualSerie").value = "";
+
     document.getElementById("manualDocumento").value = "";
+
     document.getElementById("manualData").value = "";
+
     document.getElementById("manualSituacao").value = "DISPONIVEL";
 
     mostrarPagina("equipamentos");
@@ -490,9 +636,11 @@ window.cadastrarManual = function() {
 // ==================================================
 
 function atualizarEquipamentos() {
+
     const grupos = {};
 
     movimentacoes.forEach(function(item, indice) {
+
         const identificador = item.patrimonio || item.serie;
 
         if (!identificador) return;
@@ -500,28 +648,55 @@ function atualizarEquipamentos() {
         const chave = normalizarTexto(identificador);
 
         if (!grupos[chave]) {
+
             grupos[chave] = {
+
                 patrimonio: item.patrimonio,
+
                 serie: item.serie,
+
+                tipoEquipamento:
+                    item.tipoEquipamento || "Não informado",
+
                 servidor: "",
+
                 situacao: "Sem movimentação",
+
                 movimentos: []
+
             };
         }
 
+        if (
+            (!grupos[chave].tipoEquipamento ||
+            grupos[chave].tipoEquipamento === "Não informado") &&
+            item.tipoEquipamento
+        ) {
+            grupos[chave].tipoEquipamento = item.tipoEquipamento;
+        }
+
         grupos[chave].movimentos.push({
+
             ...item,
+
             ordem: indice
+
         });
     });
 
     equipamentos = Object.values(grupos).map(function(equipamento) {
 
         equipamento.movimentos.sort(function(a, b) {
+
             const dataA = converterDataParaNumero(a.data);
+
             const dataB = converterDataParaNumero(b.data);
 
-            if (dataA !== null && dataB !== null && dataA !== dataB) {
+            if (
+                dataA !== null &&
+                dataB !== null &&
+                dataA !== dataB
+            ) {
                 return dataA - dataB;
             }
 
@@ -531,17 +706,23 @@ function atualizarEquipamentos() {
         equipamento.movimentos.forEach(function(item) {
 
             if (item.tipo === "CADASTRO") {
+
                 equipamento.servidor = "";
+
                 equipamento.situacao = "Disponível";
             }
 
             if (item.tipo === "RETIRADA") {
+
                 equipamento.servidor = item.servidor;
+
                 equipamento.situacao = "Em uso";
             }
 
             if (item.tipo === "RESTITUIÇÃO") {
+
                 equipamento.servidor = "";
+
                 equipamento.situacao = "Disponível";
             }
         });
@@ -555,24 +736,37 @@ function atualizarEquipamentos() {
 // ==================================================
 
 function carregarTabela(lista) {
+
     const tabela = document.getElementById("resultadoTabela");
+
     const contador = document.getElementById("contador");
 
     tabela.innerHTML = "";
 
     lista.forEach(function(item) {
+
         const linha = document.createElement("tr");
 
         const valores = [
+
             item.servidor || "Disponível",
+
+            item.tipoEquipamento || "Não informado",
+
             item.serie,
+
             item.patrimonio,
+
             item.situacao
+
         ];
 
         valores.forEach(function(valor) {
+
             const coluna = document.createElement("td");
+
             coluna.textContent = valor || "";
+
             linha.appendChild(coluna);
         });
 
@@ -587,7 +781,9 @@ function carregarTabela(lista) {
 }
 
 window.mostrarTodos = function() {
+
     document.getElementById("busca").value = "";
+
     carregarTabela(equipamentos);
 };
 
@@ -596,15 +792,23 @@ window.mostrarTodos = function() {
 // ==================================================
 
 window.pesquisar = function() {
+
     const termo = normalizarTexto(
         document.getElementById("busca").value
     );
 
     const resultado = equipamentos.filter(function(item) {
+
         return (
+
             normalizarTexto(item.servidor).includes(termo) ||
+
+            normalizarTexto(item.tipoEquipamento).includes(termo) ||
+
             normalizarTexto(item.serie).includes(termo) ||
+
             normalizarTexto(item.patrimonio).includes(termo)
+
         );
     });
 
@@ -616,42 +820,58 @@ window.pesquisar = function() {
 // ==================================================
 
 window.renderizarServidores = function() {
+
     const area = document.getElementById("listaServidores");
+
     area.innerHTML = "";
 
     const nomes = [...new Set(
+
         movimentacoes
             .map(item => item.servidor)
             .filter(Boolean)
+
     )].sort();
 
     if (nomes.length === 0) {
+
         area.textContent = "Nenhum servidor encontrado.";
+
         return;
     }
 
     const tabela = document.createElement("table");
+
     const cabecalho = document.createElement("tr");
 
     ["Servidor", "Equipamentos em uso"].forEach(function(valor) {
+
         const th = document.createElement("th");
+
         th.textContent = valor;
+
         cabecalho.appendChild(th);
     });
 
     tabela.appendChild(cabecalho);
 
     nomes.forEach(function(nome) {
+
         const linha = document.createElement("tr");
 
         const quantidade = equipamentos.filter(function(item) {
+
             return item.servidor === nome &&
                 item.situacao === "Em uso";
+
         }).length;
 
         [nome, quantidade].forEach(function(valor) {
+
             const coluna = document.createElement("td");
+
             coluna.textContent = valor;
+
             linha.appendChild(coluna);
         });
 
@@ -666,8 +886,11 @@ window.renderizarServidores = function() {
 // ==================================================
 
 window.renderizarHistorico = function() {
+
     const tabela = document.getElementById("tabelaHistorico");
+
     const contador = document.getElementById("contadorHistorico");
+
     const campo = document.getElementById("buscaHistorico");
 
     const termo = normalizarTexto(campo.value);
@@ -675,27 +898,50 @@ window.renderizarHistorico = function() {
     tabela.innerHTML = "";
 
     const lista = movimentacoes.filter(function(item) {
+
         return (
+
             normalizarTexto(item.servidor).includes(termo) ||
+
+            normalizarTexto(item.tipoEquipamento).includes(termo) ||
+
             normalizarTexto(item.patrimonio).includes(termo) ||
+
             normalizarTexto(item.serie).includes(termo) ||
+
             normalizarTexto(item.documento).includes(termo)
+
         );
     });
 
     lista.forEach(function(item) {
+
         const linha = document.createElement("tr");
 
-        [
+        const valores = [
+
             item.servidor,
+
             item.patrimonio,
+
             item.serie,
+
             item.documento,
+
             item.data,
-            item.tipo
-        ].forEach(function(valor) {
+
+            item.tipo,
+
+            item.tipoEquipamento || "Não informado"
+
+        ];
+
+        valores.forEach(function(valor) {
+
             const coluna = document.createElement("td");
+
             coluna.textContent = valor || "";
+
             linha.appendChild(coluna);
         });
 
@@ -711,6 +957,7 @@ window.renderizarHistorico = function() {
 // ==================================================
 
 document.addEventListener("DOMContentLoaded", function() {
+
     atualizarEquipamentos();
 
     console.log("DMIKA iniciado com sucesso!");
@@ -718,4 +965,5 @@ document.addEventListener("DOMContentLoaded", function() {
     console.log("Movimentações carregadas:", movimentacoes.length);
 
     console.log("Equipamentos identificados:", equipamentos.length);
+
 });
